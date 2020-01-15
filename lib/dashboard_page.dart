@@ -1,4 +1,5 @@
 import 'package:chelsea_news/destination.dart';
+import 'package:chelsea_news/match_repository.dart';
 import 'package:chelsea_news/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +16,16 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   final _key = GlobalKey<ScaffoldState>();
   int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserRepository>(context);
+    Provider.of<MatchRepository>(context).getStandings();
     return Scaffold(
       key: _key,
       appBar: AppBar(

@@ -1,5 +1,6 @@
 import 'package:chelsea_news/dashboard_page.dart';
 import 'package:chelsea_news/login_page.dart';
+import 'package:chelsea_news/match_repository.dart';
 import 'package:chelsea_news/phone_size.dart';
 import 'package:chelsea_news/user_repository.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,10 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<UserRepository>(
           create: (_) => new UserRepository.instance(),
-        )
+        ),
+        ChangeNotifierProvider<MatchRepository>(
+          create: (_) => MatchRepository(),
+        ),
       ],
       child: MaterialApp(
         title: 'Chelsea News',
