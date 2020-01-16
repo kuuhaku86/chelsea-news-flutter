@@ -54,7 +54,7 @@ class MatchRepository with ChangeNotifier {
         _matches.add(
           LeagueMatch(
             enemy: match["homeTeam"]["name"] != "Chelsea FC"? match["homeTeam"]["name"] : match["awayTeam"]["name"],
-            week: match["season"]["currentMatchday"].toString(),
+            week: match["matchday"].toString(),
             time: match["utcDate"]
           ),
         );
