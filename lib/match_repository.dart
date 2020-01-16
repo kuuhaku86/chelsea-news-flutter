@@ -2,12 +2,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class MatchRepository with ChangeNotifier {
-  List <TeamStanding> _standings;
-  List <LeagueMatch> _matchs;
-  List <LeagueMatch> _privateMatchs;
+  List <TeamStanding> _standings = [];
+  List <LeagueMatch> _matches = [];
+  List <LeagueMatch> _privateMatchs = [];
   
   List get standings => _standings;
-  List get matchs => _matchs;
+  List get matchs => _matches;
   List get privateMatchs => _privateMatchs;
 
   Future<void> getStandings() async {
@@ -19,10 +19,12 @@ class MatchRepository with ChangeNotifier {
         )
       );
       
+      _standings.clear();
+
       for (var team in response.data["standings"][0]["table"]) {
         _standings.add(TeamStanding(
-          image: team["cestUrl"].toString(),
-          name: team["name"].toString(),
+          image: team["team"]["crestUrl"].toString(),
+          name: team["team"]["name"].toString(),
           win: team["won"].toString(),
           draw: team["draw"].toString(),
           lose: team["lost"].toString(),
@@ -31,8 +33,33 @@ class MatchRepository with ChangeNotifier {
           )
         );
       }
+      notifyListeners();
+    }catch(e){
+      print(e);
+    }
+  }
 
-      print(standings);
+  Future<void> getMatches() async {
+    try {
+      Response response = await Dio().get(
+        'https://api.football-data.org/v2/teams/61/matches?status=SCHEDULED',
+        options: Options(
+          headers: {"X-Auth-Token" : "0efefcbdc5d349edb1464616a9f4048d"}
+        )
+      );
+      
+      _matches.clear();
+
+      for (var match in response.data["matches"]) {
+        _matches.add(
+          LeagueMatch(
+            enemy: match["homeTeam"]["name"] != "Chelsea FC"? match["homeTeam"]["name"] : match["awayTeam"]["name"],
+            week: match["season"]["currentMatchday"].toString(),
+            time: match["utcDate"]
+          ),
+        );
+      }
+      notifyListeners();
     }catch(e){
       print(e);
     }
@@ -51,8 +78,8 @@ class TeamStanding {
 }
 
 class LeagueMatch {
-  final String homeName,
-    awayName,
-    week;
-  LeagueMatch({this.homeName, this.awayName, this.week});
+  final String enemy,
+    week,
+    time;
+  LeagueMatch({this.enemy, this.week, this.time});
 }
