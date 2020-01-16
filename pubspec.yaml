@@ -29,6 +29,7 @@ dependencies:
   splashscreen: ^1.2.0
   dio: ^3.0.8
   connectivity: ^0.4.6+2
+  intl: ^0.16.1
 
 dev_dependencies:
   flutter_test:

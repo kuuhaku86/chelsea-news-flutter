@@ -1,3 +1,4 @@
+import 'package:chelsea_news/dateutil.dart';
 import 'package:chelsea_news/match_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,14 +11,15 @@ class Match extends StatefulWidget {
 }
 
 class _MatchState extends State<Match> {
-  
+  var matches;
+
   @override
   Widget build(BuildContext context) {
-    final matches = Provider.of<MatchRepository>(context).matchs;
+    matches = Provider.of<MatchRepository>(context);
     return ListView.builder(
-      itemCount: matches.length,
+      itemCount: matches.matchs.length,
       itemBuilder: (BuildContext context, int index) {
-      return matchCard(matches[index]);
+      return matchCard(matches.matchs[index]);
       },
     );
   }
@@ -35,20 +37,22 @@ class _MatchState extends State<Match> {
           ),
         ) : Icon(
           Icons.adjust,
-          size: 50,
+          size: 45,
         ),
         title: Text(
           match.enemy,
         ),
         subtitle: Text(
-          match.time,
+          DateUtil().formattedDate(DateTime.parse(match.time).toLocal())
         ),
         trailing: IconButton(
           icon: Icon(
             Icons.add_box,
             color: Colors.black,
           ),
-          onPressed: () {},
+          onPressed: () {
+            matches.addMatch(match);
+          },
         ),
       ),
     );

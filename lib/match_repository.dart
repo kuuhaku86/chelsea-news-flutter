@@ -64,6 +64,25 @@ class MatchRepository with ChangeNotifier {
       print(e);
     }
   }
+
+  void addMatch(LeagueMatch match){
+    for (var m in _privateMatchs) {
+      if(m.time == match.time) return;
+    }
+    _privateMatchs.add(match);
+    notifyListeners();
+  }
+
+  void removeMatch(LeagueMatch match) {
+    for (var i = 0; i < _privateMatchs.length; i++) {
+      if(_privateMatchs[i].time == match.time){
+        _privateMatchs.removeAt(i);
+        break;
+      }
+    }
+
+    notifyListeners();
+  }
 }
 
 class TeamStanding {
